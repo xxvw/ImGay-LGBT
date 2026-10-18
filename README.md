@@ -31,24 +31,34 @@ npm run preview
 
 団体名・活動は仮原稿です。公開前に正式な団体情報と内容を確認してください。お問い合わせ欄は `rainbow@imgay.lgbt` 宛ての `mailto:` リンクで、端末のメールアプリを開きます。サイト内でのメール送信処理や個別相談の受付機能、寄付決済、CMS、解析はありません。
 
-## Cloudflare Workers Static Assets
+## Cloudflare Pages（GitHub自動デプロイ）
 
-静的サイトなのでサーバー用のAstroアダプター、データベース、秘密情報は不要です。`wrangler.jsonc` は `dist/` を配信し、不明なURLを404にします。SPA用フォールバックは使用しません。
+Cloudflareプロジェクト: `imgay-lgbt-web`。GitHubの `xxvw/ImGay-LGBT` と連携し、`main` へのpushで本番サイトを更新します。
 
-本番に近いローカル確認:
+- 本番ブランチ: `main`
+- ビルドコマンド: `npm run build`
+- 出力ディレクトリ: `dist`
+- ビルド環境変数: `NODE_VERSION=24`
+- ルートディレクトリ: リポジトリ直下
+
+静的サイトなのでサーバー用Astroアダプター、データベース、秘密情報は不要です。`wrangler.jsonc` もPages向けの設定です。生成した `404.html` により、不明なURLは404になります。
+
+Cloudflareに近いローカル確認:
 
 ```sh
 npm run cf:preview
 ```
 
-将来の公開時にのみ、Cloudflareへログインしてデプロイしてください。この制作では公開していません。
+通常の公開・更新には、後述の `git push origin main` を使用します。手動デプロイが必要な場合のみ、このプロジェクトを管理するCloudflareアカウントでWranglerにログインして実行します。
 
 ```sh
 npx wrangler login
-npm run deploy
+CLOUDFLARE_ACCOUNT_ID=f03c9582f827f3b63cac0fd092147553 npm run deploy
 ```
 
-デプロイ後、Cloudflare管理画面のWorkers & Pages → `imgay-lgbt` → Settings → Domains & Routesで `imgay.lgbt` をカスタムドメインに追加します。対象ドメインのCloudflare管理権限が必要です。別ドメインへ変更する場合は `astro.config.mjs`、`Site.astro` 内のURL、`public/robots.txt`、`public/sitemap.xml` も合わせて更新します。
+独自ドメインはCloudflareのWorkers & Pages → `imgay-lgbt-web` → Custom domainsから設定します。`imgay.lgbt` 直下をPagesに接続するには、Cloudflare側にそのドメインのゾーンが必要です。標準構成ではCloudflareネームサーバーへの変更が必要です。外部DNSを維持する場合にサポートされる構成は、`www.imgay.lgbt` などのサブドメインのCNAME接続です。DNSレコードを追加するだけでルートドメインの接続が完了するわけではありません。
+
+別ドメインへ変更する場合は `astro.config.mjs`、`Site.astro` 内のURL、`public/robots.txt`、`public/sitemap.xml` も合わせて更新します。
 
 ## 動き・アクセシビリティ
 
@@ -78,4 +88,4 @@ git commit -m "Update website"
 git push origin main
 ```
 
-ローカルの `main` は `origin/main` を追跡します。CloudflareのGit連携を設定すると、このpushを契機に本番サイトを再ビルドできます。設定値は本番ブランチ `main`、ビルドコマンド `npm run build`、出力先 `dist`、Node.js `24` です。
+ローカルの `main` は `origin/main` を追跡します。CloudflareのGit連携を設定済みのため、このpushを契機に本番サイトを再ビルドします。設定値は本番ブランチ `main`、ビルドコマンド `npm run build`、出力先 `dist`、Node.js `24` です。
