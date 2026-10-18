@@ -1,0 +1,91 @@
+---
+import { content, contactEmail, type Locale } from '../data/content';
+import '../styles/global.css';
+const { locale = 'ja' } = Astro.props as { locale: Locale };
+const c = content[locale];
+const path = locale === 'ja' ? '/' : '/en/';
+---
+<!doctype html>
+<html lang={locale}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f8f7f2" />
+  <title>{c.title}</title>
+  <meta name="description" content={c.description} />
+  <link rel="canonical" href={`https://imgay.lgbt${path}`} />
+  <link rel="alternate" hreflang="ja" href="https://imgay.lgbt/" />
+  <link rel="alternate" hreflang="en" href="https://imgay.lgbt/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://imgay.lgbt/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={c.title} />
+  <meta property="og:description" content={c.description} />
+  <meta property="og:url" content={`https://imgay.lgbt${path}`} />
+  <meta property="og:locale" content={locale === 'ja' ? 'ja_JP' : 'en_US'} />
+  <meta property="og:image" content="https://imgay.lgbt/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+</head>
+<body id="top">
+  <a href="#main" class="skip">{c.skip}</a>
+  <header class="header">
+    <a class="logo" href={path} aria-label="imgay.lgbt"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>imgay<span class="logo-domain">.lgbt</span><span class="logo-dot">✳</span></a>
+    <nav class="desktop-nav" aria-label={c.menu}>
+      <a href="#about">{c.nav[0]}</a><a href="#activities">{c.nav[1]}</a><a class="nav-cta" href="#involve">{c.nav[2]} <span aria-hidden="true">↗</span></a>
+    </nav>
+    <div class="header-tools">
+      <div class="languages" aria-label={locale === 'ja' ? '言語' : 'Language'}><a href="/" lang="ja" aria-current={locale === 'ja' ? 'page' : undefined} data-language>JP</a><span>/</span><a href="/en/" lang="en" aria-current={locale === 'en' ? 'page' : undefined} data-language>EN</a></div>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label={c.menu}><span></span><span></span></button>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav" aria-label={c.menu} hidden><a href="#about">{c.nav[0]}</a><a href="#activities">{c.nav[1]}</a><a href="#involve">{c.nav[2]}</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="eyebrow"><span class="little-star" aria-hidden="true">✳</span>{c.eyebrow}</p>
+        <h1 id="hero-title">{c.hero.map((line, i) => <span class:list={{'color-word': i === 1}}>{line}</span>)}</h1>
+        <p class="hero-intro">{c.intro}</p>
+        <a class="button dark" href="#about">{c.discover}<span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-art" data-scene aria-hidden="true">
+        <div class="art-grid"></div>
+        <div class="rainbow-fallback"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✧</span>
+        <div class="art-caption"><span>DIFFERENT COLORS.</span><span>ONE BEAUTIFUL WORLD.</span></div>
+        <span class="art-index">01 — ∞</span>
+      </div>
+      <div class="hero-bottom"><span class="scroll-indicator"><span aria-hidden="true">↓</span>{c.scroll}</span><span class="hero-note">BE YOU. BELONG HERE.</span></div>
+    </section>
+    <div class="color-strip" aria-hidden="true">{['#ea6454','#f6ae47','#ebd35a','#72a68a','#7399c2','#a28bbd'].map(color => <span style={`background:${color}`}></span>)}</div>
+    <div class="manifesto-strip">{c.ribbon.map((text) => <span>{text}<i aria-hidden="true">✳</i></span>)}</div>
+    <section class="section mission" id="about" aria-labelledby="mission-title">
+      <div class="section-label"><span>01 / OUR PURPOSE</span><span>{c.missionLabel}</span></div>
+      <div class="mission-layout"><h2 id="mission-title" data-reveal>{c.missionTitle.map(t => <span>{t}</span>)}</h2><div class="mission-copy" data-reveal>{c.missionText.map(t => <p>{t}</p>)}<span class="handwritten">You are enough, just as you are.<span aria-hidden="true">↗</span></span></div></div>
+    </section>
+    <section class="section values" id="values" aria-labelledby="values-title">
+      <div class="section-label"><span>02 / OUR VALUES</span><span>{c.valuesLabel}</span></div>
+      <h2 class="medium-title" id="values-title" data-reveal>{c.valuesTitle}</h2>
+      <div class="value-grid">{c.values.map((v, i) => <article class="value" data-reveal><div class={`value-symbol symbol-${i}`} aria-hidden="true">{v.icon}</div><p class="micro-label">0{i+1} — {v.en}</p><h3>{v.title}</h3><p>{v.text}</p></article>)}</div>
+    </section>
+    <section class="section activities" id="activities" aria-labelledby="activities-title">
+      <div class="section-label"><span>03 / WHAT WE DO</span><span>{c.activitiesLabel}</span></div>
+      <div class="section-heading"><h2 id="activities-title" data-reveal>{c.activitiesTitle.map(t => <span>{t}</span>)}</h2><p>{c.activitiesIntro}</p></div>
+      <div class="activity-grid">{c.activities.map((a, i) => <article class="activity" data-reveal><div class={`activity-art ${a.graphic}`} aria-hidden="true"><span class="graphic-number">0{i+1}</span>{a.graphic === 'learn' ? <div class="sun-shape">✳</div> : a.graphic === 'connect' ? <div class="rings"><i></i><i></i></div> : <div class="steps-art"><i></i><i></i><i></i><span>↗</span></div>}<span class="graphic-label">{['OPEN YOUR MIND','FIND YOUR PEOPLE','LET IT REACH'][i]}</span></div><div class="activity-copy"><p class="category">{a.category}</p><h3>{a.title}</h3><p>{a.text}</p><span class="status"><i></i>{c.planned}</span></div></article>)}</div>
+    </section>
+    <section class="section involvement" id="involve" aria-labelledby="involve-title">
+      <div class="section-label"><span>04 / WITH YOU</span><span>{c.involveLabel}</span></div>
+      <div class="involve-layout"><div><h2 id="involve-title" data-reveal>{c.involveTitle.map(t => <span>{t}</span>)}</h2><p class="involve-description">{c.involveText}</p><span class="involve-flower" aria-hidden="true">✳</span></div><ol class="small-steps">{c.steps.map((s, i) => <li data-reveal><span class="step-number">0{i+1}</span><div><h3>{s[0]}</h3><p>{s[1]}</p></div><span class="step-arrow" aria-hidden="true">↗</span></li>)}</ol></div>
+    </section>
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="section-label"><span>05 / GOOD TO KNOW</span><span>{c.faqLabel}</span></div>
+      <div class="faq-layout"><h2 class="medium-title" id="faq-title">{c.faqTitle}</h2><div>{c.faqs.map(([q,a]) => <details><summary><span class="q-mark" aria-hidden="true">Q.</span><span>{q}</span><span class="faq-plus" aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div></div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-top"><div><p class="micro-label">EVERY COLOR BELONGS.</p><h2>{c.footerTitle.map(t=><span>{t}</span>)}</h2><p>{c.footerText}</p></div><div class="contact"><span>{c.contact}</span><a class="contact-status" href={`mailto:${contactEmail}`}><span>{contactEmail}</span><span aria-hidden="true">↗</span></a></div></div><div class="footer-brand" aria-label="ImGAY.LGBT"><span class="footer-word">ImGAY.LGBT</span><span class="footer-flower" aria-hidden="true">✳</span></div><div class="footer-bottom"><span>© {new Date().getFullYear()} ImGAY.LGBT</span><p>{c.draft}</p><a href="#top" aria-label={c.top}>↑</a></div></footer>
+  <script>
+    import '../scripts/main';
+  </script>
+</body>
+</html>
