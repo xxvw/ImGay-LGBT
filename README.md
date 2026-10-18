@@ -38,7 +38,7 @@ Cloudflareプロジェクト: `imgay-lgbt-web`。GitHubの `xxvw/ImGay-LGBT` と
 - 本番ブランチ: `main`
 - ビルドコマンド: `npm run build`
 - 出力ディレクトリ: `dist`
-- ビルド環境変数: `NODE_VERSION=24`
+- Node.js: `24`（`.node-version` で固定）
 - ルートディレクトリ: リポジトリ直下
 
 静的サイトなのでサーバー用Astroアダプター、データベース、秘密情報は不要です。`wrangler.jsonc` もPages向けの設定です。生成した `404.html` により、不明なURLは404になります。
