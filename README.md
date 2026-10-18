@@ -56,7 +56,15 @@ npx wrangler login
 CLOUDFLARE_ACCOUNT_ID=f03c9582f827f3b63cac0fd092147553 npm run deploy
 ```
 
-独自ドメインはCloudflareのWorkers & Pages → `imgay-lgbt-web` → Custom domainsから設定します。`imgay.lgbt` 直下をPagesに接続するには、Cloudflare側にそのドメインのゾーンが必要です。標準構成ではCloudflareネームサーバーへの変更が必要です。外部DNSを維持する場合にサポートされる構成は、`www.imgay.lgbt` などのサブドメインのCNAME接続です。DNSレコードを追加するだけでルートドメインの接続が完了するわけではありません。
+独自ドメインは `www.imgay.lgbt` を使用します。DNS管理は外部サービスのまま維持します。CloudflareのWorkers & Pages → `imgay-lgbt-web` → Custom domainsで登録します。
+
+外部DNS側に追加するレコード:
+
+| 種類 | ホスト名 | 値 |
+| --- | --- | --- |
+| CNAME | `www` | `imgay-lgbt-web.pages.dev` |
+
+TTLはデフォルト値で構いません。反映後、Cloudflareがドメインを検証してHTTPS証明書を発行します。メール用のMXやTXTレコードは変更しません。ルートの `imgay.lgbt` は、このCNAME設定だけでは接続されません。
 
 別ドメインへ変更する場合は `astro.config.mjs`、`Site.astro` 内のURL、`public/robots.txt`、`public/sitemap.xml` も合わせて更新します。
 
